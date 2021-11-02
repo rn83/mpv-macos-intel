@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    runs-on: macos-10.14
+    runs-on: macos-10.15
     steps:
       - name: Checkout mpv-player/mpv
         uses: actions/checkout@v2
