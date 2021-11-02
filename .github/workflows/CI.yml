@@ -2,15 +2,15 @@ name: CI
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: '5 0 * * MON'
+#   schedule:
+#     - cron: '5 0 * * MON'
 
 jobs:
   build:
-    runs-on: macos-11
+    runs-on: macos-10.15
     steps:
       - name: Checkout mpv-player/mpv
-        uses: eko5624/checkout@v2
+        uses: actions/checkout@v2
         with:
           repository: "mpv-player/mpv"
           fetch-depth: 0
@@ -21,7 +21,7 @@ jobs:
 
       - name: Get last build version
         id: last_build
-        uses: eko5624/find-latest-tag@v1.1.0
+        uses: oprypin/find-latest-tag@v1.1.0
         with:
           repository: ${{ github.repository }}
           releases-only: true
@@ -39,7 +39,7 @@ jobs:
               sudo xcode-select -s "/Applications/Xcode_13.1.app"
               echo "Updated Xcode path ${XCODE_PATH} -> $(xcode-select -p)"
               ;;
-          esac  
+          esac
 
       - name: Install dependencies
         run: |
@@ -63,7 +63,7 @@ jobs:
           ./waf configure
           ./waf
         env:
-          CFLAGS: -mmacosx-version-min=10.8
+          CFLAGS: -mmacosx-version-min=10.14
 
       - name: Bundle mpv
         run: |
@@ -84,7 +84,7 @@ jobs:
         run: echo "::set-output name=date::$(date +%Y-%m-%d)"
 
       - name: Create Release
-        uses: eko5624/action-gh-release@v1
+        uses: softprops/action-gh-release@v1
         with:
           tag_name: mpv-${{ steps.version.outputs.version }}
           name: ${{ steps.timestamp.outputs.date }}
